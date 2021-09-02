@@ -1,7 +1,7 @@
 # VAC_CSLR
-This repo holds codes of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://arxiv.org/abs/2104.02330)
-
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/visual-alignment-constraint-for-continuous/sign-language-recognition-on-rwth-phoenix)](https://paperswithcode.com/sota/sign-language-recognition-on-rwth-phoenix?p=visual-alignment-constraint-for-continuous)
+
+This repo holds codes of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://arxiv.org/abs/2104.02330)
 
 ---    
 ### Prerequisites
@@ -36,7 +36,7 @@ This repo holds codes of the paper: Visual Alignment Constraint for Continuous S
 
 | Backbone | WER on Dev | WER on Test | Pretrained model                                             |
 | -------- | ---------- | ----------- | ------------------------------------------------------------ |
-| ResNet18 | 21.2%      | 22.3%       | [[Baidu]](https://pan.baidu.com/s/12WSc2Xhy7LSkLojh1XqY6g) (passwd: qi83)<br />[[Dropbox]]([https://www.dropbox.com/s/zbas78emfz5m4bp/resnet18_slr_pretrained_distill25.pt?dl=0](https://www.dropbox.com/s/zbas78emfz5m4bp/resnet18_slr_pretrained_distill25.pt?dl=0) |
+| ResNet18 | 21.2%      | 22.3%       | [[Baidu]](https://pan.baidu.com/s/12WSc2Xhy7LSkLojh1XqY6g) (passwd: qi83)<br />[[Dropbox]](https://www.dropbox.com/s/zbas78emfz5m4bp/resnet18_slr_pretrained_distill25.pt?dl=0)     
 
 ​	To evaluate the pretrained model, run the command below：   
 `python main.py --load-weights resnet18_slr_pretrained.pt --phase test`
