@@ -39,10 +39,12 @@ def seq_train(loader, model, optimizer, device, epoch_idx, recoder):
     return loss_value
 
 
-def seq_eval(cfg, loader, model, device, mode, epoch, work_dir, recoder):
+def seq_eval(cfg, loader, model, device, mode, epoch, work_dir, recoder,
+             evaluate_tool="python"):
     model.eval()
     total_sent = []
     total_info = []
+    total_conv_sent = []
     stat = {i: [0, 0] for i in range(len(loader.dataset.dict))}
     for batch_idx, data in enumerate(tqdm(loader)):
         recoder.record_timer("device")
@@ -55,21 +57,34 @@ def seq_eval(cfg, loader, model, device, mode, epoch, work_dir, recoder):
 
         total_info += [file_name.split("|")[0] for file_name in data[-1]]
         total_sent += ret_dict['recognized_sents']
+        total_conv_sent += ret_dict['conv_sents']
     try:
+        python_eval = True if evaluate_tool == "python" else False
         write2file(work_dir + "output-hypothesis-{}.ctm".format(mode), total_info, total_sent)
-        ret = evaluate(prefix=work_dir, mode=mode, output_file="output-hypothesis-{}.ctm".format(mode),
-                       evaluate_dir=cfg.dataset_info['evaluation_dir'],
-                       evaluate_prefix=cfg.dataset_info['evaluation_prefix'],
-                       output_dir="epoch_{}_result/".format(epoch))
+        write2file(work_dir + "output-hypothesis-{}-conv.ctm".format(mode), total_info,
+                   total_conv_sent)
+        conv_ret = evaluate(
+            prefix=work_dir, mode=mode, output_file="output-hypothesis-{}-conv.ctm".format(mode),
+            evaluate_dir=cfg.dataset_info['evaluation_dir'],
+            evaluate_prefix=cfg.dataset_info['evaluation_prefix'],
+            output_dir="epoch_{}_result/".format(epoch),
+            python_evaluate=python_eval,
+        )
+        lstm_ret = evaluate(
+            prefix=work_dir, mode=mode, output_file="output-hypothesis-{}.ctm".format(mode),
+            evaluate_dir=cfg.dataset_info['evaluation_dir'],
+            evaluate_prefix=cfg.dataset_info['evaluation_prefix'],
+            output_dir="epoch_{}_result/".format(epoch),
+            python_evaluate=python_eval,
+            triplet=True,
+        )
     except:
         print("Unexpected error:", sys.exc_info()[0])
-        ret = "Percent Total Error       =  100.00%   (ERROR)"
-        return float(ret.split("=")[1].split("%")[0])
+        lstm_ret = 100.0
     finally:
         pass
-    recoder.print_log("Epoch {}, {} {}".format(epoch, mode, ret),
-                      '{}/{}.txt'.format(work_dir, mode))
-    return float(ret.split("=")[1].split("%")[0])
+    recoder.print_log(f"Epoch {epoch}, {mode} {lstm_ret: 2.2f}%", f"{work_dir}/{mode}.txt")
+    return lstm_ret
 
 
 def seq_feature_generation(loader, model, device, mode, work_dir, recoder):

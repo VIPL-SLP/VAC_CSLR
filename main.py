@@ -44,24 +44,24 @@ class Processor():
                           self.device, epoch, self.recoder)
                 if eval_model:
                     dev_wer = seq_eval(self.arg, self.data_loader['dev'], self.model, self.device,
-                                       'dev', epoch, self.arg.work_dir, self.recoder)
-                    self.recoder.print_log("Dev WER: {:05.2f}".format(dev_wer))
+                                       'dev', epoch, self.arg.work_dir, self.recoder, self.arg.evaluate_tool)
+                    self.recoder.print_log("Dev WER: {:05.2f}%".format(dev_wer))
                 if save_model:
                     model_path = "{}dev_{:05.2f}_epoch{}_model.pt".format(self.arg.work_dir, dev_wer, epoch)
                     seq_model_list.append(model_path)
                     print("seq_model_list", seq_model_list)
                     self.save_model(epoch, model_path)
         elif self.arg.phase == 'test':
-            if self.arg.load_weights is None:
-                raise ValueError('Please appoint --weights.')
+            if self.arg.load_weights is None and self.arg.load_checkpoints is None:
+                raise ValueError('Please appoint --load-weights.')
             self.recoder.print_log('Model:   {}.'.format(self.arg.model))
             self.recoder.print_log('Weights: {}.'.format(self.arg.load_weights))
             # train_wer = seq_eval(self.arg, self.data_loader["train_eval"], self.model, self.device,
-            #                      "train", 6667, self.arg.work_dir, self.recoder)
+            #                      "train", 6667, self.arg.work_dir, self.recoder, self.arg.evaluate_tool)
             dev_wer = seq_eval(self.arg, self.data_loader["dev"], self.model, self.device,
-                               "dev", 6667, self.arg.work_dir, self.recoder)
+                               "dev", 6667, self.arg.work_dir, self.recoder, self.arg.evaluate_tool)
             test_wer = seq_eval(self.arg, self.data_loader["test"], self.model, self.device,
-                                "test", 6667, self.arg.work_dir, self.recoder)
+                                "test", 6667, self.arg.work_dir, self.recoder, self.arg.evaluate_tool)
             self.recoder.print_log('Evaluation Done.\n')
         elif self.arg.phase == "features":
             for mode in ["train", "dev", "test"]:
@@ -138,7 +138,7 @@ class Processor():
 
     def load_checkpoint_weights(self, model, optimizer):
         self.load_model_weights(model, self.arg.load_checkpoints)
-        state_dict = torch.load(self.arg.load_weights)
+        state_dict = torch.load(self.arg.load_checkpoints)
 
         if len(torch.cuda.get_rng_state_all()) == len(state_dict['rng_state']['cuda']):
             print("Loading random seeds...")
@@ -146,6 +146,7 @@ class Processor():
         if "optimizer_state_dict" in state_dict.keys():
             print("Loading optimizer parameters...")
             optimizer.load_state_dict(state_dict["optimizer_state_dict"])
+            optimizer.to(self.device.output_device)
         if "scheduler_state_dict" in state_dict.keys():
             print("Loading scheduler parameters...")
             optimizer.scheduler.load_state_dict(state_dict["scheduler_state_dict"])
@@ -176,11 +177,13 @@ class Processor():
             collate_fn=self.feeder.collate_fn,
         )
 
+
 def import_class(name):
     components = name.rsplit('.', 1)
     mod = importlib.import_module(components[0])
     mod = getattr(mod, components[1])
     return mod
+
 
 if __name__ == '__main__':
     sparser = utils.get_parser()

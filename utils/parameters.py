@@ -58,6 +58,8 @@ def get_parser():
         type=int,
         default=20,
         help='the interval for printing messages (#iteration)')
+    parser.add_argument(
+        '--evaluate-tool', default="python", help='sclite or python')
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # feeder

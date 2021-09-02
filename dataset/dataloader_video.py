@@ -5,7 +5,6 @@ import pdb
 import six
 import glob
 import time
-import lmdb
 import torch
 import random
 import pandas
@@ -172,6 +171,4 @@ if __name__ == "__main__":
         num_workers=0,
     )
     for data in dataloader:
-        print
-        data[1]
         pdb.set_trace()

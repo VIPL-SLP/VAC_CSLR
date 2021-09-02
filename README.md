@@ -1,14 +1,18 @@
 # VAC_CSLR
 This repo holds codes of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://arxiv.org/abs/2104.02330)
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/visual-alignment-constraint-for-continuous/sign-language-recognition-on-rwth-phoenix)](https://paperswithcode.com/sota/sign-language-recognition-on-rwth-phoenix?p=visual-alignment-constraint-for-continuous)
+
+---    
 ### Prerequisites
 
 - This project is implemented in Pytorch (>1.8). Thus please install Pytorch first.
 
 - ctcdecode==0.4 [[parlance/ctcdecode]](https://github.com/parlance/ctcdecode)，for beam search decode.
 
-- sclite [[kaldi-asr/kaldi]](https://github.com/kaldi-asr/kaldi), install kaldi tool to get sclite for evaluation. After installation, create a soft link toward the sclite:    
+- [Optional] sclite [[kaldi-asr/kaldi]](https://github.com/kaldi-asr/kaldi), install kaldi tool to get sclite for evaluation. After installation, create a soft link toward the sclite:    
   `ln -s PATH_TO_KALDI/tools/sctk-2.4.10/bin/sclite ./software/sclite`
+  We also provide a python version evaluation tool for convenience, but sclite can provide more detailed statistics.
 
 - [Optional] [SeanNaren/warp-ctc](https://github.com/SeanNaren/warp-ctc) At the beginning of this research, we adopt warp-ctc for supervision, and we recently find that pytorch version CTC can reach similar results.
 
@@ -32,7 +36,7 @@ This repo holds codes of the paper: Visual Alignment Constraint for Continuous S
 
 | Backbone | WER on Dev | WER on Test | Pretrained model                                             |
 | -------- | ---------- | ----------- | ------------------------------------------------------------ |
-| ResNet18 | 21.9%      | 22.5%       | [[Baidu]](https://pan.baidu.com/s/1XZWKSmtHGdM1Q8eMn4YIhA) (passwd: 1jta)<br />[[Dropbox]](https://www.dropbox.com/s/ul5oi8lhdzp2r5t/resnet18_slr_pretrained.pt?dl=0) |
+| ResNet18 | 21.2%      | 22.3%       | [[Baidu]](https://pan.baidu.com/s/12WSc2Xhy7LSkLojh1XqY6g) (passwd: qi83)<br />[[Dropbox]]([https://www.dropbox.com/s/zbas78emfz5m4bp/resnet18_slr_pretrained_distill25.pt?dl=0](https://www.dropbox.com/s/zbas78emfz5m4bp/resnet18_slr_pretrained_distill25.pt?dl=0) |
 
 ​	To evaluate the pretrained model, run the command below：   
 `python main.py --load-weights resnet18_slr_pretrained.pt --phase test`
@@ -51,9 +55,8 @@ We also provide feature extraction function to extract frame-wise features for o
 
 ### To Do List
 
-- [ ] Pure python implemented evaluation tools.
-- [ ] WAR and WER calculation scripts.
-- [ ] More pretrained models.
+- [x] Pure python implemented evaluation tools.
+- [x] WAR and WER calculation scripts.
 
 ### Citation
 

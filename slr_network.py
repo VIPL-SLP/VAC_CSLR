@@ -74,6 +74,8 @@ class SLRModel(nn.Module):
         outputs = self.classifier(tm_outputs['predictions'])
         pred = None if self.training \
             else self.decoder.decode(outputs, lgt, batch_first=False, probs=False)
+        conv_pred = None if self.training \
+            else self.decoder.decode(conv1d_outputs['conv_logits'], lgt, batch_first=False, probs=False)
 
         return {
             "framewise_features": framewise,
@@ -81,6 +83,7 @@ class SLRModel(nn.Module):
             "feat_len": lgt,
             "conv_logits": conv1d_outputs['conv_logits'],
             "sequence_logits": outputs,
+            "conv_sents": conv_pred,
             "recognized_sents": pred,
         }
 
