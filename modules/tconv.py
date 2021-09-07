@@ -1,4 +1,5 @@
 import pdb
+import copy
 import torch
 import collections
 import torch.nn as nn
@@ -36,7 +37,8 @@ class TemporalConv(nn.Module):
         if self.num_classes != -1:
             self.fc = nn.Linear(self.hidden_size, self.num_classes)
 
-    def update_lgt(self, feat_len):
+    def update_lgt(self, lgt):
+        feat_len = copy.deepcopy(lgt)
         for ks in self.kernel_size:
             if ks[0] == 'P':
                 feat_len //= 2
