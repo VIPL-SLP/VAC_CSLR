@@ -3,7 +3,7 @@
 
 This repo holds codes of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://arxiv.org/abs/2104.02330)
 
----    
+---
 ### Prerequisites
 
 - This project is implemented in Pytorch (>1.8). Thus please install Pytorch first.
@@ -63,11 +63,28 @@ We also provide feature extraction function to extract frame-wise features for o
 If you find this repo useful in your research works, please consider citing:
 
 ```latex
-@inproceedings{min2021vac,
-  title={Visual Alignment Constraint for Continuous Sign Language Recognition},
-  author={Yuecong Min, Aiming Hao, Xiujuan Chai, Xilin Chen},
-  booktitle={International Conference on Computer Vision (ICCV)},
-  year={2021}
+@InProceedings{Min_2021_ICCV,
+    author    = {Min, Yuecong and Hao, Aiming and Chai, Xiujuan and Chen, Xilin},
+    title     = {Visual Alignment Constraint for Continuous Sign Language Recognition},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2021},
+    pages     = {11542-11551}
+}
+```
+
+### Relevant paper
+
+Self-Mutual Distillation Learning for Continuous Sign Language Recognition[[paper]](https://openaccess.thecvf.com/content/ICCV2021/html/Hao_Self-Mutual_Distillation_Learning_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html)
+
+```latex
+@InProceedings{Hao_2021_ICCV,
+    author    = {Hao, Aiming and Min, Yuecong and Chen, Xilin},
+    title     = {Self-Mutual Distillation Learning for Continuous Sign Language Recognition},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2021},
+    pages     = {11303-11312}
 }
 ```
 
