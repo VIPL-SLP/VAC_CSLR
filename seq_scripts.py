@@ -15,7 +15,7 @@ def seq_train(loader, model, optimizer, device, epoch_idx, recoder):
     model.train()
     loss_value = []
     clr = [group['lr'] for group in optimizer.optimizer.param_groups]
-    for batch_idx, data in enumerate(loader):
+    for batch_idx, data in enumerate(tqdm(loader)):
         vid = device.data_to_device(data[0])
         vid_lgt = device.data_to_device(data[1])
         label = device.data_to_device(data[2])

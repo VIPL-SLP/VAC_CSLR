@@ -5,6 +5,7 @@ import collections
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class TemporalConv(nn.Module):
     def __init__(self, input_size, hidden_size, conv_type=2, use_bn=False, num_classes=-1):
         super(TemporalConv, self).__init__()
@@ -41,7 +42,7 @@ class TemporalConv(nn.Module):
         feat_len = copy.deepcopy(lgt)
         for ks in self.kernel_size:
             if ks[0] == 'P':
-                feat_len //= 2
+                feat_len = torch.div(feat_len, 2)
             else:
                 feat_len -= int(ks[1]) - 1
         return feat_len

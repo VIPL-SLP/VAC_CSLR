@@ -15,6 +15,7 @@ from collections import OrderedDict
 
 faulthandler.enable()
 import utils
+from modules.sync_batchnorm import convert_model
 from seq_scripts import seq_train, seq_eval, seq_feature_generation
 
 
@@ -113,6 +114,7 @@ class Processor():
                 model.conv2d,
                 device_ids=self.device.gpu_list,
                 output_device=self.device.output_device)
+        model = convert_model(model)
         model.cuda()
         return model
 

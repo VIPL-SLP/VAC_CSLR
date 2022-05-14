@@ -19,9 +19,23 @@ class Identity(nn.Module):
         return x
 
 
+class NormLinear(nn.Module):
+    def __init__(self, in_dim, out_dim):
+        super(NormLinear, self).__init__()
+        self.weight = nn.Parameter(torch.Tensor(in_dim, out_dim))
+        nn.init.xavier_uniform_(self.weight, gain=nn.init.calculate_gain('relu'))
+
+    def forward(self, x):
+        outputs = torch.matmul(x, F.normalize(self.weight, dim=0))
+        return outputs
+
+
 class SLRModel(nn.Module):
-    def __init__(self, num_classes, c2d_type, conv_type, use_bn=False, tm_type='BiLSTM',
-                 hidden_size=1024, gloss_dict=None, loss_weights=None):
+    def __init__(
+            self, num_classes, c2d_type, conv_type, use_bn=False,
+            hidden_size=1024, gloss_dict=None, loss_weights=None,
+            weight_norm=True, share_classifier=True
+    ):
         super(SLRModel, self).__init__()
         self.decoder = None
         self.loss = dict()
@@ -37,8 +51,15 @@ class SLRModel(nn.Module):
                                    num_classes=num_classes)
         self.decoder = utils.Decode(gloss_dict, num_classes, 'beam')
         self.temporal_model = BiLSTMLayer(rnn_type='LSTM', input_size=hidden_size, hidden_size=hidden_size,
-                                              num_layers=2, bidirectional=True)
-        self.classifier = nn.Linear(hidden_size, self.num_classes)
+                                          num_layers=2, bidirectional=True)
+        if weight_norm:
+            self.classifier = NormLinear(hidden_size, self.num_classes)
+            self.conv1d.fc = NormLinear(hidden_size, self.num_classes)
+        else:
+            self.classifier = nn.Linear(hidden_size, self.num_classes)
+            self.classifier = nn.Linear(hidden_size, self.num_classes)
+        if share_classifier:
+            self.conv1d.fc = self.classifier
         self.register_backward_hook(self.backward_hook)
 
     def backward_hook(self, module, grad_input, grad_output):

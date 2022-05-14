@@ -2,28 +2,29 @@ feeder: dataset.dataloader_video.BaseFeeder
 phase: train
 dataset: phoenix14
 # dataset: phoenix14-si5
-num_epoch: 80
+num_epoch: 40
 work_dir: ./work_dir/baseline_res18/
 batch_size: 2
 random_seed: 0
 test_batch_size: 8
 num_worker: 10
-device: 0,1,2
+device: 0,1
 log_interval: 50
 eval_interval: 1
 save_interval: 5
 # python in default
 evaluate_tool: sclite
 loss_weights:
-  ConvCTC: 1.0
   SeqCTC: 1.0
-  Dist: 10.0
-# load_weights: ./slt_baseresline/baseline_p14_framewise_biCTC/dev_21.90_epoch55_model.pt
+  # VAC
+  # ConvCTC: 1.0
+  # Dist: 10.0
+#load_weights: ''
 
 optimizer_args:
   optimizer: Adam
   base_lr: 0.0001
-  step: [ 40, 60]
+  step: [ 20, 35]
   learning_ratio: 1
   weight_decay: 0.0001
   start_epoch: 0
@@ -42,3 +43,6 @@ model_args:
   c2d_type: resnet18
   conv_type: 2
   use_bn: 1
+  # SMKD
+  share_classifier: False
+  weight_norm: False

@@ -1,7 +1,41 @@
 # VAC_CSLR
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/visual-alignment-constraint-for-continuous/sign-language-recognition-on-rwth-phoenix)](https://paperswithcode.com/sota/sign-language-recognition-on-rwth-phoenix?p=visual-alignment-constraint-for-continuous)
 
-This repo holds codes of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://arxiv.org/abs/2104.02330)
+This repo holds codes of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://openaccess.thecvf.com/content/ICCV2021/html/Min_Visual_Alignment_Constraint_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html)
+
+<img src=".\framework.png" alt="framework" style="zoom: 80%;" />
+
+---
+### Update (2022.05.14)
+
+In recent experiments, we found an implementation improvement about the proposed method. In our early experiments, we adopt `nn.DataParallel` to parallel the visual feature extractor on multiple GPUs. However, only statistic updated on device 0 is kept during training ([Dataparallel](https://pytorch.org/docs/stable/generated/torch.nn.DataParallel.html)), which leads to unstable training results (results may be different when adopting different numbers of GPUs and batch sizes). Therefore, we adopt [syncBN](https://github.com/vacancy/Synchronized-BatchNorm-PyTorch) in this update, the training schedule can be shorten to 40 epochs, and the relevant results are also provided. Experimental results on other datasets will be provided in our future journal version.
+
+```python
+from modules.sync_batchnorm import convert_model
+
+def model_to_device(self, model):
+    model = model.to(self.device.output_device)
+    if len(self.device.gpu_list) > 1:
+        model.conv2d = nn.DataParallel(
+            model.conv2d,
+            device_ids=self.device.gpu_list,
+            output_device=self.device.output_device)
+    model = convert_model(model)
+    model.cuda()
+    return model
+```
+
+With the provided code, the updated results are expected as:
+
+| Backbone                | WER on Dev | WER on Test |                       Pretrained model                       |
+| :---------------------- | :--------: | :---------: | :----------------------------------------------------------: |
+| ResNet18 (baseline)     |    23.8    |    25.4     | [[Baidu]](https://pan.baidu.com/s/17ernd4x3YIAEKpVa1rJqWA?pwd=iccv) [[GoogleDrive]](https://drive.google.com/file/d/1_yPOrVyxO2AJiLC6xOAPiGuPu41ov5Yg/view?usp=sharing) |
+| ResNet18+VAC (CTC only) |    21.5    |    22.1     | [[Baidu]](https://pan.baidu.com/s/1vDQyNrKM9Ar2ppvnCcohBA?pwd=VAC0) [[GoogleDrive]](https://drive.google.com/file/d/1etgf94fGvvIvR6c0VCXc8j2aFy5BsrZp/view?usp=sharing) |
+| ResNet18+VAC+SMKD       |  **19.8**  |  **20.5**   | [[Baidu]](https://pan.baidu.com/s/1jWT6FhxpD36fQilXZgyW9A?pwd=SMKD) [[GoogleDrive]](https://drive.google.com/file/d/1ULbB4qNdPhDjdKUX3JlgSYkQI2W3Lwm9/view?usp=sharing) |
+
+The VAC result is corresponding to the setting of`loss_weights: SeqCTC: 1.0, ConvCTC: 1.0`. In addition to that, the VAC+SMKD adopt the setting of `model_args: share_classifier: True, weight_norm True`.
+
+If you find this repo useful in your research works, please consider cite our papers [VAC](https://openaccess.thecvf.com/content/ICCV2021/html/Min_Visual_Alignment_Constraint_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html) and [SMKD](https://openaccess.thecvf.com/content/ICCV2021/html/Hao_Self-Mutual_Distillation_Learning_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html).
 
 ---
 ### Prerequisites
@@ -36,10 +70,12 @@ This repo holds codes of the paper: Visual Alignment Constraint for Continuous S
 
 | Backbone | WER on Dev | WER on Test | Pretrained model                                             |
 | -------- | ---------- | ----------- | ------------------------------------------------------------ |
-| ResNet18 | 21.2%      | 22.3%       | [[Baidu]](https://pan.baidu.com/s/12WSc2Xhy7LSkLojh1XqY6g) (passwd: qi83)<br />[[Dropbox]](https://www.dropbox.com/s/zbas78emfz5m4bp/resnet18_slr_pretrained_distill25.pt?dl=0)     
+| ResNet18 | 21.2%      | 22.3%       | [[Baidu]](https://pan.baidu.com/s/12WSc2Xhy7LSkLojh1XqY6g) (passwd: qi83)<br />[[Dropbox]](https://www.dropbox.com/s/zbas78emfz5m4bp/resnet18_slr_pretrained_distill25.pt?dl=0)     |
 
 ​	To evaluate the pretrained model, run the command below：   
 `python main.py --load-weights resnet18_slr_pretrained.pt --phase test`
+
+​	(When evaluating the SMKD pretrained model,  please modify the weight_norm and share_classifier in config files as True).
 
 ### Training
 
@@ -73,9 +109,7 @@ If you find this repo useful in your research works, please consider citing:
 }
 ```
 
-### Relevant paper
-
-Self-Mutual Distillation Learning for Continuous Sign Language Recognition[[paper]](https://openaccess.thecvf.com/content/ICCV2021/html/Hao_Self-Mutual_Distillation_Learning_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html)
+Self-Mutual Distillation Learning for Continuous Sign Language Recognition [[paper]](https://openaccess.thecvf.com/content/ICCV2021/html/Hao_Self-Mutual_Distillation_Learning_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html)
 
 ```latex
 @InProceedings{Hao_2021_ICCV,
