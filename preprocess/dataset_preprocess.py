@@ -57,7 +57,7 @@ def sign_dict_update(total_dict, info):
 
 def resize_img(img_path, dsize='210x260px'):
     dsize = tuple(int(res) for res in re.findall("\d+", dsize))
-    img = cv2.imread(img_path)
+    img = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8), cv2.IMREAD_COLOR)
     img = cv2.resize(img, dsize, interpolation=cv2.INTER_LANCZOS4)
     return img
 
@@ -71,9 +71,9 @@ def resize_dataset(video_idx, dsize, info_dict):
         rs_img_dir = os.path.dirname(rs_img_path)
         if not os.path.exists(rs_img_dir):
             os.makedirs(rs_img_dir)
-            cv2.imwrite(rs_img_path, rs_img)
+            cv2.imencode('.png', rs_img)[1].tofile(rs_img_path)
         else:
-            cv2.imwrite(rs_img_path, rs_img)
+            cv2.imencode('.png', rs_img)[1].tofile(rs_img_path)
 
 
 def run_mp_cmd(processes, process_func, process_args):
