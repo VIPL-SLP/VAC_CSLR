@@ -1,7 +1,7 @@
 # VAC_CSLR
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/visual-alignment-constraint-for-continuous/sign-language-recognition-on-rwth-phoenix)](https://paperswithcode.com/sota/sign-language-recognition-on-rwth-phoenix?p=visual-alignment-constraint-for-continuous)
 
-This repo holds codes of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://openaccess.thecvf.com/content/ICCV2021/html/Min_Visual_Alignment_Constraint_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html)
+This repo holds the code of the paper: Visual Alignment Constraint for Continuous Sign Language Recognition.(ICCV 2021) [[paper]](https://openaccess.thecvf.com/content/ICCV2021/html/Min_Visual_Alignment_Constraint_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html)
 
 <img src=".\framework.png" alt="framework" style="zoom: 80%;" />
 
@@ -33,7 +33,7 @@ With the provided code, the updated results are expected as:
 | ResNet18+VAC (CTC only) |    21.5    |    22.1     | [[Baidu]](https://pan.baidu.com/s/1vDQyNrKM9Ar2ppvnCcohBA?pwd=VAC0) [[GoogleDrive]](https://drive.google.com/file/d/1etgf94fGvvIvR6c0VCXc8j2aFy5BsrZp/view?usp=sharing) |
 | ResNet18+VAC+SMKD       |  **19.8**  |  **20.5**   | [[Baidu]](https://pan.baidu.com/s/1jWT6FhxpD36fQilXZgyW9A?pwd=SMKD) [[GoogleDrive]](https://drive.google.com/file/d/1ULbB4qNdPhDjdKUX3JlgSYkQI2W3Lwm9/view?usp=sharing) |
 
-The VAC result is corresponding to the setting of`loss_weights: SeqCTC: 1.0, ConvCTC: 1.0`. In addition to that, the VAC+SMKD adopt the setting of `model_args: share_classifier: True, weight_norm True`.
+The VAC result is corresponding to the setting of`loss_weights: SeqCTC: 1.0, ConvCTC: 1.0`. In addition to that, the VAC+SMKD adopt the setting of `model_args: share_classifier: True, weight_norm: True`.
 
 If you find this repo useful in your research works, please consider cite our papers [VAC](https://openaccess.thecvf.com/content/ICCV2021/html/Min_Visual_Alignment_Constraint_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html) and [SMKD](https://openaccess.thecvf.com/content/ICCV2021/html/Hao_Self-Mutual_Distillation_Learning_for_Continuous_Sign_Language_Recognition_ICCV_2021_paper.html).
 
