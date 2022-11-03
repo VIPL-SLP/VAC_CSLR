@@ -57,7 +57,7 @@ class SLRModel(nn.Module):
             self.conv1d.fc = NormLinear(hidden_size, self.num_classes)
         else:
             self.classifier = nn.Linear(hidden_size, self.num_classes)
-            self.classifier = nn.Linear(hidden_size, self.num_classes)
+            self.conv1d.fc = nn.Linear(hidden_size, self.num_classes)
         if share_classifier:
             self.conv1d.fc = self.classifier
         self.register_backward_hook(self.backward_hook)
