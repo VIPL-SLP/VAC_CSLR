@@ -55,7 +55,7 @@ If you find this repo useful in your research works, please consider cite our pa
 1. Download the RWTH-PHOENIX-Weather 2014 Dataset [[download link]](https://www-i6.informatik.rwth-aachen.de/~koller/RWTH-PHOENIX/). Our experiments based on phoenix-2014.v3.tar.gz.
 
 2. After finishing dataset download, extract it to ./dataset/phoenix, it is suggested to make a soft link toward downloaded dataset.   
-   `ln -s PATH_TO_DATASET/phoenix2014-release ./dataset/phienix2014`
+   `ln -s PATH_TO_DATASET/phoenix2014-release ./dataset/phoenix2014`
 
 3. The original image sequence is 210x260, we resize it to 256x256 for augmentation. Run the following command to generate gloss dict and resize image sequence.     
 
